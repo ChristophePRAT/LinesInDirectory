@@ -1,7 +1,10 @@
+#!/usr/bin/env python
 import os
 import argparse
 from argparse import ArgumentTypeError as err
 import tqdm
+
+
 class PathType(object):
     def __init__(self, exists=True, type='file', dash_ok=True):
         '''exists:
