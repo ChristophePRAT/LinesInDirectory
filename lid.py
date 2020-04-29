@@ -4,7 +4,6 @@ import argparse
 from argparse import ArgumentTypeError as err
 import tqdm
 
-
 class PathType(object):
     def __init__(self, exists=True, type='file', dash_ok=True):
         '''exists:
@@ -103,7 +102,6 @@ all_files = getListOfFiles(directoryToExecute)
 for each_file in tqdm.tqdm(all_files):
     file = open(each_file, "r", encoding='latin-1')
     # file.encode('utf-8')
-
     number_of_lines = 0
     number_of_words = 0
     number_of_characters = 0
@@ -117,10 +115,8 @@ for each_file in tqdm.tqdm(all_files):
     totalNumberOfLines += number_of_lines
     if args["verbose"]:
         print(f"File: {each_file}, lines: {number_of_lines}, words: {number_of_words}, characters: {number_of_characters}.")
-
 niceInt = ""
 totalNumberOfLinesArray = [int(i) for i in str(totalNumberOfLines)][::-1]
-
 for index in range(len(totalNumberOfLinesArray)):
     if index % 3 == 0 and index != 0:
         niceInt = f'{totalNumberOfLinesArray[index]},{niceInt}'
