@@ -10,7 +10,7 @@ from setuptools import setup
 setup(
     name="lid", # Replace with your own username
     version="0.0.1",
-    script=["lid.py"],
+    # script=["lid.py"],
     author="Christophe Prat",
     author_email="chrisotpheprat@icloud.com",
     url="https://github.com/ChristophePRAT/LinesInDirectory",
@@ -19,7 +19,7 @@ setup(
     paskages=["tqdm"],
     entry_points= {
         'console_scripts': [ 
-            'lid = lid:main' 
+            'lid=lid:main' 
         ]   
     }
 )
