@@ -66,7 +66,7 @@ ap = argparse.ArgumentParser()
 
 # Add the arguments to the parser
 ap.add_argument("-v", "--verbose", action='store_true', help="Show file name with number of lines")
-ap.add_argument("-d", "--directory", type=PathType(exists=True, type='dir'), default=".", required=False, help="Direcory to execute command")
+ap.add_argument("directory", nargs=1, type=PathType(exists=True, type='dir'), help="Direcory to execute command")
 args = vars(ap.parse_args())
 
 # if args["directory"] {
