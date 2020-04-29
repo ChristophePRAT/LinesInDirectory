@@ -2,7 +2,32 @@
 import os
 import argparse
 from argparse import ArgumentTypeError as err
+from tqdm.auto import tqdm
+import inspect
+import contextlib
 import tqdm
+
+@contextlib.contextmanager
+def redirect_to_tqdm():
+    # Store builtin print
+    old_print = print
+    def new_print(*args, **kwargs):
+        # If tqdm.tqdm.write raises error, use builtin print
+        try:
+            tqdm.tqdm.write(*args, **kwargs)
+        except:
+            old_print(*args, ** kwargs)
+
+    try:
+        # Globaly replace print with new_print
+        inspect.builtins.print = new_print
+        yield
+    finally:
+        inspect.builtins.print = old_print
+def tqdm_redirect(*args, **kwargs):
+    with redirect_to_tqdm():
+        for x in tqdm.tqdm(*args, **kwargs):
+            yield x
 
 class PathType(object):
     def __init__(self, exists=True, type='file', dash_ok=True):
@@ -63,7 +88,6 @@ class PathType(object):
 
 # Construct the argument parser
 ap = argparse.ArgumentParser()
-
 # Add the arguments to the parser
 ap.add_argument("-v", "--verbose", action='store_true', help="Show file name with number of lines")
 ap.add_argument("directory", nargs=1, type=PathType(exists=True, type='dir'), help="Direcory to execute command")
@@ -72,7 +96,7 @@ args = vars(ap.parse_args())
 # if args["directory"] {
 #     directoryToExecute = args["directory"]
 # }
-directoryToExecute = args["directory"]
+directoryToExecute = args["directory"][0]
 
 '''
     For the given path, get the List of all files in the directory tree 
@@ -95,9 +119,9 @@ def getListOfFiles(dirName):
     return allFiles
 def main():
     totalNumberOfLines = 0
-    directoryToExecute = ""
     all_files = getListOfFiles(directoryToExecute)
-    for each_file in tqdm.tqdm(all_files):
+
+    for each_file in tqdm_redirect(all_files):
         file = open(each_file, "r", encoding='latin-1')
         # file.encode('utf-8')
         number_of_lines = 0
